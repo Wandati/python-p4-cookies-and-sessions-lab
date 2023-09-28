@@ -27,8 +27,24 @@ def index_articles():
 
 @app.route('/articles/<int:id>')
 def show_article(id):
+    Article_content = Article.query.filter_by(id=id).first() 
+    session['page_views'] = session.get('page_views', 0)
+    session['page_views'] += 1
 
-    pass
+    if session['page_views'] <= 3:
+        return {'article_id': Article_content.id, 'title': Article_content.title, 'content': Article_content.content},200
+        # return jsonify(article_data)
+    else:
+     
+        return {'message': 'Maximum pageview limit reached'}, 401
+
+
+
+
+
+
+
+    
 
 if __name__ == '__main__':
     app.run(port=5555)
